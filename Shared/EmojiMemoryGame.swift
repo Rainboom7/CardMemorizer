@@ -11,13 +11,21 @@ import Foundation
 class EmojiMemoryGame : ObservableObject{
     
     var theme: Theme
+    var startNewGame : ()->Void = {}
+    
     @Published var model: MemoryGame<String>!
 
     init(theme: Theme) {
         self.theme = theme
-        self.makeGame()
+        self.makeGame(numberOfPairs: theme.content.count)
     }
-
+    
+    init(theme: Theme, numberOfPairs:Int, startNewGame: @escaping ()->Void) {
+        self.theme = theme
+        self.makeGame(numberOfPairs: numberOfPairs)
+        self.startNewGame = startNewGame
+    }
+    
     var cards: [MemoryGame<String>.Card] {
         model.cards
     }
@@ -31,13 +39,25 @@ class EmojiMemoryGame : ObservableObject{
     }
 
     func newGame() {
-        self.theme = ThemeFactory.randomBuild()
-        self.makeGame()
+       startNewGame()
+    }
+    
+    var hints:Int {
+        model.hints
+    }
+    
+    func useHint() {
+        model.useHint()
+    }
+    
+    private func makeNewGame()->Void{
+        let newTheme = ThemeFactory.randomBuild();
+        self.makeGame(numberOfPairs: newTheme.content.count)
     }
 
-    private func makeGame() {
+    private func makeGame(numberOfPairs:Int) {
         let content = theme.content
-        model = MemoryGame(numberOfPairsOfCards: content.count) { (index) -> String in
+        model = MemoryGame(numberOfPairsOfCards: numberOfPairs) { (index) -> String in
             return content[index]
         }
     }

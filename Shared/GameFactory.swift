@@ -8,11 +8,10 @@ import Foundation
 
 class GameFactory {
 
-    static func createMemoryGame() -> EmojiMemoryGame {
-        EmojiMemoryGame(theme: ThemeFactory.randomBuild())
-    }
-
-    static func createMemoryGame(theme: ThemeFactory.ThemeOption) -> EmojiMemoryGame {
-        EmojiMemoryGame(theme: ThemeFactory.build(theme: theme))
+    static func createMemoryGame(theme: ThemeFactory.ThemeOption,difficutly:DifficultyFactory.DifficutlyOption,startNewGame: @escaping ()->Void) -> EmojiMemoryGame {
+        EmojiMemoryGame(theme: ThemeFactory.build(theme: theme),
+                        numberOfPairs: DifficultyFactory.build(difficultyOption: difficutly).numberOfPairs,
+                        startNewGame: startNewGame
+        )
     }
 }

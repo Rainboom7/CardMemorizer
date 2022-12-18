@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 protocol Theme {
     var content: [String] { get }
@@ -18,8 +19,36 @@ class ThemeFactory {
     enum ThemeOption: CaseIterable {
         case none
         case love
-        case vegetables
+        case food
         case cold
+        var description:String{
+            get{
+                switch self {
+                case .none:
+                return "Letters [A,B,C]"
+                case .love:
+                return "Love [🥰,💕,💌]"
+                case .food:
+                return "Food [🥒,🧅,🥕]"
+                case .cold:
+                return "Cold [🧊,🥶,⛷]"
+                }
+            }
+        }
+        var name:String{
+            get{
+                switch self {
+                case .none:
+                return "Default"
+                case .love:
+                return "Love"
+                case .food:
+                return "Food"
+                case .cold:
+                return "Cold"
+                }
+            }
+        }
     }
     
     static func randomBuild() -> Theme {
@@ -31,7 +60,7 @@ class ThemeFactory {
     static func build(theme: ThemeOption) -> Theme {
         switch theme {
         case .love: return LoveTheme()
-        case .vegetables: return VegetablesTheme()
+        case .food: return VegetablesTheme()
         case .cold: return ColdTheme()
         default: return DefaultTheme()
         }
@@ -39,25 +68,25 @@ class ThemeFactory {
 }
 
 struct DefaultTheme: Theme {
-    var content: [String] = ["A", "B", "C", "D"]
+    var content: [String] = ["A", "B", "C", "D", "E", "F", "G","H","I","J","K","L"]
     var cardColor: UIColor = .black
     var name: String = "Default"
 }
 
 struct LoveTheme: Theme {
-    var content: [String] = ["🥰","😍","🤩","👩‍❤️‍👩"]
+    var content: [String] = ["🥰","😍","🤩","👩‍❤️‍👩","💕", "💌","💟","😻","😘","💘","💔","🖤","💒"]
     var cardColor: UIColor = .systemPink
     var name: String = "Love"
 }
 
 struct VegetablesTheme: Theme {
-    var content: [String] = ["🍎", "🍆", "🍣", "🗿"]
+    var content: [String] = ["🍎", "🍆", "🥒", "🥕","🍊","🌽","🥬", "🥔", "🍞", "🥗","🧅","🍖"]
     var cardColor: UIColor = .green
-    var name: String = "Vegetables"
+    var name: String = "Food"
 }
 
 struct ColdTheme: Theme {
-    var content: [String] = ["🧊", "🥶", "⛄️", "⛷"]
+    var content: [String] = ["🧊", "🥶", "⛄️", "⛷","❄️","🌲","🧥","🀩","🧊","⛸️","🏂","🍨"]
     var cardColor: UIColor = .blue
     var name: String = "Cold"
 }

@@ -13,7 +13,10 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     let unmatchScore = -1
     
     private(set) var score = 0
+    private (set) var hints = 1
     private(set) var cards: Array<Card>
+    private var hintTimePassed = false;
+    private var hintTimeActive = false;
     
     private var onlyFaceUpCardIndex : Int?{
     get { cards.indices.filter ({ cards[$0].isFaceUp}).oneAndOnly }
@@ -21,6 +24,11 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
 }
     
   public mutating func choose(_ card: Card)  {
+    
+    if(hintTimeActive){
+        return
+    }
+    
     guard let chosenIndex = cards.firstIndex(where: {$0.id == card.id}) ,
           !cards[chosenIndex].isFaceUp,
           !cards[chosenIndex].isMatched else {return}
@@ -47,6 +55,28 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
             }
         }
         return nil
+    }
+    
+    public mutating func useHint(){
+        if(hints>0){
+            showHint()
+            hints = hints-1
+        }
+    }
+    private mutating func flipAllCards(faceUp:Bool){
+        cards.indices.forEach{ cards[$0].isFaceUp = faceUp }
+    }
+    
+    private mutating func showHint()  {
+        hintTimeActive=true;
+        flipAllCards(faceUp: true)
+        var game = self
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            game.hintTimePassed = true
+            game.flipAllCards(faceUp: false)
+            game.hintTimeActive = false;
+        }
+
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int)-> CardContent) {
