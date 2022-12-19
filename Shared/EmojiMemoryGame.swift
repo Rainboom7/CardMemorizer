@@ -47,7 +47,17 @@ class EmojiMemoryGame : ObservableObject{
     }
     
     func useHint() {
-        model.useHint()
+        if(model.hints>0){
+            model.startUsingHint()
+            var myself = self
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
+                myself.stopUsingHint()
+            }
+        }
+    }
+    
+    private func stopUsingHint(){
+        model.endUsingHint()
     }
     
     private func makeNewGame()->Void{

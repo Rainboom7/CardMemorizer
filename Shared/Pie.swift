@@ -26,7 +26,7 @@ struct Pie: Shape {
     func path(in rect: CGRect) -> Path {
         var p = Path()
 
-        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let center = CGPoint(x: rect.midX	, y: rect.midY)
         p.move(to: center)
         p.addArc(center: center,
                  radius: rect.width/2,

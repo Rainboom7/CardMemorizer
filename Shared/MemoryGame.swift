@@ -57,26 +57,26 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
         return nil
     }
     
-    public mutating func useHint(){
-        if(hints>0){
-            showHint()
-            hints = hints-1
-        }
+    public mutating func endUsingHint(){
+        hintTimePassed = true
+        hintTimeActive = false;
+        flipAllCards(faceUp: false)
+        hintTimeActive = false;
     }
-    private mutating func flipAllCards(faceUp:Bool){
+    public mutating func startUsingHint(){
+        hintTimeActive=true
+        flipAllCards(faceUp: true)
+        hints=hints-1
+    }
+    private  mutating func flipAllCards(faceUp:Bool){
         cards.indices.forEach{ cards[$0].isFaceUp = faceUp }
     }
     
     private mutating func showHint()  {
         hintTimeActive=true;
         flipAllCards(faceUp: true)
-        var game = self
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            game.hintTimePassed = true
-            game.flipAllCards(faceUp: false)
-            game.hintTimeActive = false;
-        }
-
+        sleep(2)
+        flipAllCards(faceUp: false)
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int)-> CardContent) {
