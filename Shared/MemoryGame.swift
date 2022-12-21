@@ -60,23 +60,19 @@ struct MemoryGame<CardContent> where CardContent: Equatable{
     public mutating func endUsingHint(){
         hintTimePassed = true
         hintTimeActive = false;
-        flipAllCards(faceUp: false)
+        flipAllCardsForHint(faceUp: false)
         hintTimeActive = false;
     }
     public mutating func startUsingHint(){
         hintTimeActive=true
-        flipAllCards(faceUp: true)
+        flipAllCardsForHint(faceUp: true)
         hints=hints-1
     }
-    private  mutating func flipAllCards(faceUp:Bool){
-        cards.indices.forEach{ cards[$0].isFaceUp = faceUp }
-    }
-    
-    private mutating func showHint()  {
-        hintTimeActive=true;
-        flipAllCards(faceUp: true)
-        sleep(2)
-        flipAllCards(faceUp: false)
+    private  mutating func flipAllCardsForHint(faceUp:Bool){
+        cards.indices.forEach{
+            cards[$0].isFaceUp = faceUp
+            cards[$0].usingHintTime = faceUp
+        }
     }
     
     init(numberOfPairsOfCards: Int, createCardContent: (Int)-> CardContent) {
@@ -104,6 +100,10 @@ extension MemoryGame {
     struct Card: Identifiable {
         var isFaceUp = false {
             didSet {
+                if(usingHintTime){
+                    return;
+                }
+                
                 if isFaceUp {
                     startUsingBonusTime()
                 } else {
@@ -120,6 +120,7 @@ extension MemoryGame {
         var id: Int
                 
         var bonusTimeLimit: TimeInterval = 6
+        var usingHintTime = false;
         
         private var faceUpTime: TimeInterval {
             if let date = lastFaceUpDate {
@@ -145,7 +146,7 @@ extension MemoryGame {
         }
         
         var isConsumingBonusTime: Bool {
-            isFaceUp && !isMatched && bonusTimeRemaining > 0
+            !usingHintTime && isFaceUp && !isMatched && bonusTimeRemaining > 0
         }
         
         private mutating func startUsingBonusTime() {

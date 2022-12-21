@@ -74,12 +74,7 @@ struct TitleScreen : View{
             return AnyView(showGameView())
         case .help:
             return AnyView(showHelpView())
-        default:
-            return AnyView(Text("Error!"))
        }
 }
-    
-
-
 
 }

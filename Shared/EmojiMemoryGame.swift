@@ -49,7 +49,7 @@ class EmojiMemoryGame : ObservableObject{
     func useHint() {
         if(model.hints>0){
             model.startUsingHint()
-            var myself = self
+            let myself = self
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0){
                 myself.stopUsingHint()
             }

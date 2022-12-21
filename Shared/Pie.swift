@@ -12,6 +12,7 @@ struct Pie: Shape {
     var startAngle: Angle
     var endAngle: Angle
     var clockwise: Bool
+    var pieColor: UIColor = .blue
     
     var animatableData: AnimatablePair<Double, Double> {
         get {
@@ -28,13 +29,13 @@ struct Pie: Shape {
 
         let center = CGPoint(x: rect.midX	, y: rect.midY)
         p.move(to: center)
+
         p.addArc(center: center,
-                 radius: rect.width/2,
+                 radius: 3*rect.width/4,
                  startAngle: startAngle,
                  endAngle: endAngle,
                  clockwise: clockwise,
                  transform: .identity)
-
         p.closeSubpath()
         return p
     }
@@ -42,7 +43,7 @@ struct Pie: Shape {
 
 private struct PieView: View {
     var body: some View {
-        Pie(startAngle: .degrees(0), endAngle: .degrees(270), clockwise: true)
+        Pie(startAngle: .degrees(0), endAngle: .degrees(270), clockwise: true, pieColor: .blue)
     }
 }
 
